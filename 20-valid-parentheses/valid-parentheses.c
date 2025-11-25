@@ -1,27 +1,29 @@
-#include <stdbool.h>
-#include <string.h>
-
 bool isValid(char* s) {
     char stack[10000];
     int top = -1;
 
     for (int i = 0; s[i] != '\0'; i++) {
-        char c = s[i];
+        char ch = s[i];
 
-        if (c == '(' || c == '{' || c == '[') {
-            stack[++top] = c;  
-        } else {
-            if (top == -1) return false;  
+        // Push opening brackets
+        if (ch == '(' || ch == '{' || ch == '[') {
+            stack[++top] = ch;
+        } 
+        else {
+            // If closing bracket but stack is empty -> invalid
+            if (top == -1) return false;
 
             char topChar = stack[top--];
 
-            if ((c == ')' && topChar != '(') ||
-                (c == '}' && topChar != '{') ||
-                (c == ']' && topChar != '[')) {
+            // Check matching pairs
+            if ((ch == ')' && topChar != '(') ||
+                (ch == '}' && topChar != '{') ||
+                (ch == ']' && topChar != '[')) {
                 return false;
             }
         }
     }
 
+    // Valid only if no unclosed brackets left
     return top == -1;
 }
